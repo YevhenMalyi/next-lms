@@ -16,24 +16,25 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { Textarea } from '@/components/ui/textarea';
 
-interface ITitleFormProps {
+interface ITitleDescriptionProps {
   course: Course;
 }
 
 const formSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
+  description: z.string().min(1, 'Description is required'),
 });
 
-export const TitleForm = ({ course }: ITitleFormProps) => {
+export const TitleDescription = ({ course }: ITitleDescriptionProps) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { ...course },
+    defaultValues: { description: course.description || undefined },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -44,7 +45,7 @@ export const TitleForm = ({ course }: ITitleFormProps) => {
       toggleEditing();
       router.refresh();
     } catch (err) {
-      toast.error('Something wend wrong');
+      toast.error('Something went wrong');
     }
   };
 
@@ -53,14 +54,14 @@ export const TitleForm = ({ course }: ITitleFormProps) => {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course Title
+        Course Description
         <Button variant="ghost" onClick={toggleEditing}>
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <PencilIcon className="h-4 w-4 mr-2" />
-              Edit title
+              Edit desciption
             </>
           )}
         </Button>
@@ -74,13 +75,13 @@ export const TitleForm = ({ course }: ITitleFormProps) => {
           >
             <FormField
               control={form.control}
-              name="title"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
+                    <Textarea
                       disabled={isSubmitting}
-                      placeholder="e.g. 'Advanced web development'"
+                      placeholder="e.g. 'This course is about...'"
                       {...field}
                     />
                   </FormControl>
@@ -97,7 +98,14 @@ export const TitleForm = ({ course }: ITitleFormProps) => {
           </form>
         </Form>
       ) : (
-        <p className="text-sm mt-2">{course.title}</p>
+        <p
+          className={cn(
+            'text-sm mt-2',
+            !course.description && 'text-slate-500 italic'
+          )}
+        >
+          {course.description || 'No description'}
+        </p>
       )}
     </div>
   );

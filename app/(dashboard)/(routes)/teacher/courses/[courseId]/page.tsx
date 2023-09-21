@@ -5,8 +5,8 @@ import type { Course } from '@prisma/client';
 import { LayoutDashboard } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
-import { TitleForm } from './_components/TitleForm';
-import { TitleDescription } from './_components/TitleDescription';
+import { TitleForm } from './_components/title-form';
+import { TitleDescription } from './_components/description-form';
 
 const CourceIdPage = async ({
   params: { courseId },
