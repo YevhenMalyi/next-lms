@@ -15,6 +15,7 @@
       1,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-    "@typescript-eslint/semi": 2
+    "@typescript-eslint/semi": 2,
+    "react/prop-types": "off"
   }
 }

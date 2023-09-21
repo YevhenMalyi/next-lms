@@ -5,9 +5,9 @@ import { LayoutDashboard } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
 const CourceIdPage = async ({
-  params: { courseId }
-} : {
-  params: { courseId: string }
+  params: { courseId },
+}: {
+  params: { courseId: string };
 }) => {
   const { userId } = auth();
   if (!userId) {
@@ -15,7 +15,7 @@ const CourceIdPage = async ({
   }
 
   const course = await db.course.findUnique({
-    where: { 
+    where: {
       id: courseId,
     },
   });
@@ -24,27 +24,25 @@ const CourceIdPage = async ({
   }
 
   const requiredFields = [
-    course.title, 
-    course.description, 
-    course.imageUrl, 
-    course.price, 
-    course.categoryId
+    course.title,
+    course.description,
+    course.imageUrl,
+    course.price,
+    course.categoryId,
   ];
 
   const totalFieldsAmount = requiredFields.length;
   const completedFieldAmount = requiredFields.filter(Boolean).length;
   const completionText = `(${completedFieldAmount}/${totalFieldsAmount})`;
 
-  return ( 
+  return (
     <div className="p-6">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-y-2">
-          <h1 className="text-2xl font-medium">
-            Course Setup
-          </h1>
+          <h1 className="text-2xl font-medium">Course Setup</h1>
 
           <span className="text-sm text-slate-700">
-            Complete all field { completionText }
+            Complete all field {completionText}
           </span>
         </div>
       </div>
@@ -52,15 +50,13 @@ const CourceIdPage = async ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
         <div>
           <div className="flex items-center gap-x-2">
-            <IconBadge icon={ LayoutDashboard } />
-            <h2 className="text-xl">
-              Customize your course
-            </h2>
+            <IconBadge icon={LayoutDashboard} />
+            <h2 className="text-xl">Customize your course</h2>
           </div>
         </div>
       </div>
     </div>
   );
 };
- 
+
 export default CourceIdPage;

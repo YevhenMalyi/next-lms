@@ -37,15 +37,17 @@ const teacherRoutes = [
 
 const SidebarRoutes = () => {
   const pathname = usePathname();
-  
+
   const isTeacherPage = pathname?.includes('/teacher');
   const routes = isTeacherPage ? teacherRoutes : guestRoutes;
 
-  return ( 
+  return (
     <div className="flex flex-col w-full">
-      { routes.map((route) => (<SidebarItem { ...route } key={ route.key }/>))}
+      {routes.map((route) => (
+        <SidebarItem {...route} key={route.key} />
+      ))}
     </div>
-   );
-}
- 
+  );
+};
+
 export default SidebarRoutes;

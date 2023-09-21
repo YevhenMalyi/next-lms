@@ -42,31 +42,30 @@ const CreateCoursePage = () => {
     }
   };
 
-  return ( 
+  return (
     <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
       <div>
         <h1 className="text-2xl">Name your course</h1>
         <p className="text-sm text-slate-600">
-          How do you want to name your course? Don't worry, you can change it name later
+          How do you want to name your course? Don&apos;t worry, you can change
+          it name later
         </p>
-        <Form { ...form }>
+        <Form {...form}>
           <form
             className="space-y-8 mt-8"
-            onSubmit={ form.handleSubmit(onSubmit) }
+            onSubmit={form.handleSubmit(onSubmit)}
           >
             <FormField
-              control={ form.control }
+              control={form.control}
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Course Title
-                  </FormLabel>
+                  <FormLabel>Course Title</FormLabel>
                   <FormControl>
-                    <Input 
-                      disabled={ isSubmitting }
+                    <Input
+                      disabled={isSubmitting}
                       placeholder="e.g. `Advanced Web Development'"
-                      { ...field }
+                      {...field}
                     />
                   </FormControl>
                   <FormDescription>
@@ -79,10 +78,12 @@ const CreateCoursePage = () => {
 
             <div className="flex items-center gap-x-2">
               <Link href="/">
-                <Button type="button" variant="ghost">Cancel</Button>
+                <Button type="button" variant="ghost">
+                  Cancel
+                </Button>
               </Link>
 
-              <Button type="submit" disabled={ !isValid || isSubmitting }>
+              <Button type="submit" disabled={!isValid || isSubmitting}>
                 Continue
               </Button>
             </div>
@@ -92,5 +93,5 @@ const CreateCoursePage = () => {
     </div>
   );
 };
- 
+
 export default CreateCoursePage;

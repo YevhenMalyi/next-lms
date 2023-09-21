@@ -19,45 +19,38 @@ const backgroundVariants = cva(
     defaultVariants: {
       variant: 'default',
       size: 'default',
-    }
+    },
   }
 );
 
-const iconVariants = cva(
-  '',
-  {
-    variants: {
-      variant: {
-        default: 'text-sky-700',
-        success: 'text-emerald-700',
-      },
-      size: {
-        default: 'h-8 w-8',
-        small: 'h-4 w-4',
-      },
+const iconVariants = cva('', {
+  variants: {
+    variant: {
+      default: 'text-sky-700',
+      success: 'text-emerald-700',
     },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',  
-    }
-  }
-);
+    size: {
+      default: 'h-8 w-8',
+      small: 'h-4 w-4',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'default',
+  },
+});
 
 type BackgroundVariantProps = VariantProps<typeof backgroundVariants>;
 type IconVariantsProps = VariantProps<typeof iconVariants>;
 
-interface IIconBadgeProps extends BackgroundVariantProps, IconVariantsProps{
+interface IIconBadgeProps extends BackgroundVariantProps, IconVariantsProps {
   icon: LucideIcon;
-};
-
-export const IconBadge = ({
-  icon: Icon,
-  variant,
-  size,
-}: IIconBadgeProps) => {
-  return ( 
-    <div className={ cn(backgroundVariants({variant, size})) }>
-      <Icon className={ cn(iconVariants({variant, size})) }/>
-    </div> 
-  );
 }
+
+export const IconBadge = ({ icon: Icon, variant, size }: IIconBadgeProps) => {
+  return (
+    <div className={cn(backgroundVariants({ variant, size }))}>
+      <Icon className={cn(iconVariants({ variant, size }))} />
+    </div>
+  );
+};

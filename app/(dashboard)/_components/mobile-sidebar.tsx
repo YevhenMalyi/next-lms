@@ -1,14 +1,10 @@
 import { Menu } from 'lucide-react';
 
-import { 
-  Sheet, 
-  SheetContent,
-  SheetTrigger
-} from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import Sidebar from './sidebar';
- 
+
 const MobileSidebar = () => {
-  return ( 
+  return (
     <Sheet>
       <SheetTrigger className="md:hidden pr-4 hover:opacity-75 transition">
         <Menu />
@@ -19,6 +15,6 @@ const MobileSidebar = () => {
       </SheetContent>
     </Sheet>
   );
-}
- 
+};
+
 export default MobileSidebar;
