@@ -1,8 +1,12 @@
 import { IconBadge } from '@/components/icon-badge';
 import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs';
+import type { Course } from '@prisma/client';
 import { LayoutDashboard } from 'lucide-react';
 import { redirect } from 'next/navigation';
+
+import { TitleForm } from './_components/TitleForm';
+import { TitleDescription } from './_components/TitleDescription';
 
 const CourceIdPage = async ({
   params: { courseId },
@@ -14,7 +18,7 @@ const CourceIdPage = async ({
     redirect('/');
   }
 
-  const course = await db.course.findUnique({
+  const course: Course | null = await db.course.findUnique({
     where: {
       id: courseId,
     },
@@ -53,6 +57,10 @@ const CourceIdPage = async ({
             <IconBadge icon={LayoutDashboard} />
             <h2 className="text-xl">Customize your course</h2>
           </div>
+
+          <TitleForm course={course} />
+
+          <TitleDescription course={course} />
         </div>
       </div>
     </div>
