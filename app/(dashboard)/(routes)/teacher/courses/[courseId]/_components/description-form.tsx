@@ -34,7 +34,7 @@ export const TitleDescription = ({ course }: ITitleDescriptionProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { description: course.description || undefined },
+    defaultValues: { description: course.description || '' },
   });
 
   const { isSubmitting, isValid } = form.formState;
