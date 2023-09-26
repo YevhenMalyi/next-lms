@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { PencilIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 import {
   Form,
@@ -17,24 +18,24 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { Combobox } from '@/components/ui/combobox';
 import { cn } from '@/lib/utils';
-import { Textarea } from '@/components/ui/textarea';
 
-interface IDescriptionFormProps {
+interface ICategoryFormProps {
   course: Course;
+  options: { label: string; value: string }[];
 }
 
 const formSchema = z.object({
-  description: z.string().min(1, 'Description is required'),
+  categoryId: z.string().min(1, 'Category is required'),
 });
 
-export const DescriptionForm = ({ course }: IDescriptionFormProps) => {
+export const CategoryForm = ({ course, options }: ICategoryFormProps) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { description: course.description || '' },
+    defaultValues: { categoryId: course.categoryId || '' },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -51,17 +52,21 @@ export const DescriptionForm = ({ course }: IDescriptionFormProps) => {
 
   const toggleEditing = () => setIsEditing(!isEditing);
 
+  const selectedCategory = options.find(
+    ({ value }) => value === course.categoryId
+  );
+
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course Description
+        Course Category
         <Button variant="ghost" onClick={toggleEditing}>
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <PencilIcon className="h-4 w-4 mr-2" />
-              Edit desciption
+              Edit Category
             </>
           )}
         </Button>
@@ -75,13 +80,13 @@ export const DescriptionForm = ({ course }: IDescriptionFormProps) => {
           >
             <FormField
               control={form.control}
-              name="description"
+              name="categoryId"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea
+                    <Combobox
+                      options={options}
                       disabled={isSubmitting}
-                      placeholder="e.g. 'This course is about...'"
                       {...field}
                     />
                   </FormControl>
@@ -101,10 +106,10 @@ export const DescriptionForm = ({ course }: IDescriptionFormProps) => {
         <p
           className={cn(
             'text-sm mt-2',
-            !course.description && 'text-slate-500 italic'
+            !course.categoryId && 'text-slate-500 italic'
           )}
         >
-          {course.description || 'No description'}
+          {selectedCategory?.label || 'No category'}
         </p>
       )}
     </div>

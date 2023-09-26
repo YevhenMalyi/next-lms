@@ -1,13 +1,15 @@
-import { IconBadge } from '@/components/icon-badge';
-import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs';
-import type { Course } from '@prisma/client';
+import type { Category, Course } from '@prisma/client';
 import { LayoutDashboard } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
+import { IconBadge } from '@/components/icon-badge';
+import { db } from '@/lib/db';
+
 import { TitleForm } from './_components/title-form';
-import { TitleDescription } from './_components/description-form';
+import { DescriptionForm } from './_components/description-form';
 import { ImageForm } from './_components/image-form';
+import { CategoryForm } from './_components/category-form';
 
 const CourceIdPage = async ({
   params: { courseId },
@@ -24,6 +26,13 @@ const CourceIdPage = async ({
       id: courseId,
     },
   });
+
+  const categories: Category[] = await db.category.findMany({
+    orderBy: {
+      name: 'asc',
+    },
+  });
+
   if (!course) {
     redirect('/');
   }
@@ -61,9 +70,17 @@ const CourceIdPage = async ({
 
           <TitleForm course={course} />
 
-          <TitleDescription course={course} />
+          <DescriptionForm course={course} />
 
           <ImageForm course={course} />
+
+          <CategoryForm
+            course={course}
+            options={categories.map(({ name, id }) => ({
+              label: name,
+              value: id,
+            }))}
+          />
         </div>
       </div>
     </div>
