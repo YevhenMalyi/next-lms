@@ -1,6 +1,10 @@
 import { auth } from '@clerk/nextjs';
-import type { Category, Course } from '@prisma/client';
-import { CircleDollarSign, LayoutDashboard, ListChecks } from 'lucide-react';
+import {
+  CircleDollarSign,
+  File,
+  LayoutDashboard,
+  ListChecks,
+} from 'lucide-react';
 import { redirect } from 'next/navigation';
 
 import { IconBadge } from '@/components/icon-badge';
@@ -11,6 +15,7 @@ import { DescriptionForm } from './_components/description-form';
 import { ImageForm } from './_components/image-form';
 import { CategoryForm } from './_components/category-form';
 import { PriceForm } from './_components/price-form';
+import { AttachmentsForm } from './_components/attachments-form';
 
 const CourceIdPage = async ({
   params: { courseId },
@@ -22,13 +27,20 @@ const CourceIdPage = async ({
     redirect('/');
   }
 
-  const course: Course | null = await db.course.findUnique({
+  const course = await db.course.findUnique({
     where: {
       id: courseId,
     },
+    include: {
+      attachments: {
+        orderBy: {
+          createdAt: 'desc',
+        },
+      },
+    },
   });
 
-  const categories: Category[] = await db.category.findMany({
+  const categories = await db.category.findMany({
     orderBy: {
       name: 'asc',
     },
@@ -100,6 +112,15 @@ const CourceIdPage = async ({
           </div>
 
           <PriceForm course={course} />
+
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={File} />
+              <h2 className="text-xl">Resources & Attachments</h2>
+            </div>
+
+            <AttachmentsForm course={course} />
+          </div>
         </div>
       </div>
     </div>
