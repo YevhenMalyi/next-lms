@@ -7,7 +7,7 @@ import axios from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { PencilIcon, PlusCircle } from 'lucide-react';
+import { Loader2, PlusCircle } from 'lucide-react';
 
 import {
   Form,
@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
+import { ChaptersList } from './chapters-list';
 
 interface IChaptersFormProps {
   course: Course & { chapters: Chapter[] };
@@ -51,10 +52,30 @@ export const ChaptersForm = ({ course }: IChaptersFormProps) => {
     }
   };
 
+  const onReorder = async (updateData: { id: string; position: number }) => {
+    try {
+      setIsUpdating(true);
+      await axios.put(`/api/courses/${course.id}/chapters/reorder`, {
+        list: updateData,
+      });
+      toast.success('Chapter reordered');
+      setIsUpdating(false);
+      router.refresh();
+    } catch (err) {
+      setIsUpdating(false);
+      toast.error('Something went wrong');
+    }
+  };
+
   const toggleCreating = () => setIsCreating(!isCreating);
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
+    <div className="relative mt-6 border bg-slate-100 rounded-md p-4">
+      {isUpdating ? (
+        <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-m flex items-center justify-center">
+          <Loader2 className="animate-spin h-6 w-6 text-sky-700" />
+        </div>
+      ) : null}
       <div className="font-medium flex items-center justify-between">
         Course Chapters
         <Button variant="ghost" onClick={toggleCreating}>
@@ -105,7 +126,15 @@ export const ChaptersForm = ({ course }: IChaptersFormProps) => {
               !course.chapters.length && 'text-slate-500 italic'
             )}
           >
-            {course.chapters.length ? null : 'No chapters'}
+            {course.chapters.length ? (
+              <ChaptersList
+                onEdit={() => {}}
+                onReorder={onReorder}
+                items={course.chapters || []}
+              />
+            ) : (
+              'No chapters'
+            )}
           </div>
           <p className="text-xs text-muted-foreground mt-4">
             Drag and drop to reorder the chapters
