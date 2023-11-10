@@ -52,7 +52,9 @@ export const ChaptersForm = ({ course }: IChaptersFormProps) => {
     }
   };
 
-  const onReorder = async (updateData: { id: string; position: number }) => {
+  const toggleCreating = () => setIsCreating(!isCreating);
+
+  const onReorder = async (updateData: { id: string; position: number }[]) => {
     try {
       setIsUpdating(true);
       await axios.put(`/api/courses/${course.id}/chapters/reorder`, {
@@ -67,7 +69,9 @@ export const ChaptersForm = ({ course }: IChaptersFormProps) => {
     }
   };
 
-  const toggleCreating = () => setIsCreating(!isCreating);
+  const onEdit = (id: string) => {
+    router.push(`/teacher/courses/${course.id}/chapters/${id}`);
+  };
 
   return (
     <div className="relative mt-6 border bg-slate-100 rounded-md p-4">
@@ -128,7 +132,7 @@ export const ChaptersForm = ({ course }: IChaptersFormProps) => {
           >
             {course.chapters.length ? (
               <ChaptersList
-                onEdit={() => {}}
+                onEdit={onEdit}
                 onReorder={onReorder}
                 items={course.chapters || []}
               />
