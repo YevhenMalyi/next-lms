@@ -42,8 +42,6 @@ export const ChapterDescriptionForm = ({
     defaultValues: { description: chapter.description || '' },
   });
 
-  console.log(chapter);
-
   const { isSubmitting, isValid } = form.formState;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
