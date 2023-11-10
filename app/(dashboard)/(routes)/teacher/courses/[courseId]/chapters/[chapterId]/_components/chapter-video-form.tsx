@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import type { Chapter, MuxData } from '@prisma/client';
 import * as z from 'zod';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { PencilIcon, PlusCircleIcon, VideoIcon } from 'lucide-react';
+import MuxPlayer from '@mux/mux-player-react';
 
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
@@ -46,7 +46,9 @@ const VideoContainer = ({
   chapter: Chapter & { muxData?: MuxData | null };
 }) => {
   return chapter.videoUrl ? (
-    <div className="relative aspect-video mt-2">Video uploaded</div>
+    <div className="relative aspect-video mt-2">
+      <MuxPlayer playbackId={chapter?.muxData?.playbackId || ''} />
+    </div>
   ) : (
     <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
       <VideoIcon className="h-10 w-10 text-slate-500" />
