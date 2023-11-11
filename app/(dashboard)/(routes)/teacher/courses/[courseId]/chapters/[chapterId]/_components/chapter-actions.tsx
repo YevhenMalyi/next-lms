@@ -27,10 +27,13 @@ export const ChapterActions = ({
     try {
       setIsLoading(true);
 
-      //TODO: change to separated publish/unpublish routes, maybe
-      await axios.patch(`/api/courses/${courseId}/chapters/${chapter.id}`, {
-        isPublished: !chapter.isPublished,
-      });
+      const action = chapter.isPublished ? 'unpublish' : 'publish';
+      await axios.patch(
+        `/api/courses/${courseId}/chapters/${chapter.id}/${action}`,
+        {
+          isPublished: !chapter.isPublished,
+        }
+      );
       toast.success(
         `Chapter ${chapter.isPublished ? 'unpublished' : 'published'}`
       );
