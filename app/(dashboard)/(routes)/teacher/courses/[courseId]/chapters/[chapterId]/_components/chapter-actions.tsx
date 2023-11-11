@@ -23,6 +23,26 @@ export const ChapterActions = ({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
+  const changePublishStatus = async () => {
+    try {
+      setIsLoading(true);
+
+      //TODO: change to separated publish/unpublish routes, maybe
+      await axios.patch(`/api/courses/${courseId}/chapters/${chapter.id}`, {
+        isPublished: !chapter.isPublished,
+      });
+      toast.success(
+        `Chapter ${chapter.isPublished ? 'unpublished' : 'published'}`
+      );
+      router.refresh();
+    } catch (err) {
+      console.error(err);
+      toast.error('Something went wrong');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const deleteChapter = async () => {
     try {
       setIsLoading(true);
@@ -40,7 +60,12 @@ export const ChapterActions = ({
 
   return (
     <div className="flex items-center gap-x-2">
-      <Button disabled={disabled || isLoading} variant="outline" size="sm">
+      <Button
+        disabled={disabled || isLoading}
+        onClick={changePublishStatus}
+        variant="outline"
+        size="sm"
+      >
         {chapter.isPublished ? 'Unpublish' : 'Publish'}
       </Button>
 
