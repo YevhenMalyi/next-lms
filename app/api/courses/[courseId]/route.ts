@@ -4,9 +4,9 @@ import { NextResponse } from 'next/server';
 import Mux from '@mux/mux-node';
 
 const { Video } = new Mux(
-  process.env.MUX_TOKEN_ID!, process.env.MUX_TOKEN_SECRET!
+  process.env.MUX_TOKEN_ID!,
+  process.env.MUX_TOKEN_SECRET!
 );
-
 
 export async function PATCH(
   req: Request,
@@ -51,9 +51,9 @@ export async function DELETE(
         chapters: {
           include: {
             muxData: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     if (!course) {
@@ -61,8 +61,9 @@ export async function DELETE(
     }
 
     await Promise.all([
-      ...(course.chapters)
-        .map((chapter) => Video.Assets.del(chapter.muxData?.assetId || ''))
+      ...course.chapters.map((chapter) =>
+        Video.Assets.del(chapter.muxData?.assetId || '')
+      ),
     ]);
 
     const deletedCourse = await db.course.delete({

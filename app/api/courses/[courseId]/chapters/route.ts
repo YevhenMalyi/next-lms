@@ -18,7 +18,7 @@ export async function POST(
       where: {
         id: courseId,
         userId,
-      }
+      },
     });
 
     if (!course) {
@@ -30,8 +30,8 @@ export async function POST(
         courseId,
       },
       orderBy: {
-        position: 'desc'
-      }
+        position: 'desc',
+      },
     });
 
     const position = lastChapter ? lastChapter.position + 1 : 1;
@@ -39,8 +39,8 @@ export async function POST(
       data: {
         title,
         courseId,
-        position
-      }
+        position,
+      },
     });
 
     return NextResponse.json(chapter);

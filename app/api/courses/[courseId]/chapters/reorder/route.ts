@@ -18,7 +18,7 @@ export async function PUT(
       where: {
         id: courseId,
         userId,
-      }
+      },
     });
 
     if (!course) {
@@ -28,7 +28,7 @@ export async function PUT(
     for (const item of list) {
       await db.chapter.update({
         where: { id: item.id },
-        data: { position: item.position }
+        data: { position: item.position },
       });
     }
 

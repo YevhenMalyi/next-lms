@@ -17,7 +17,7 @@ export async function PATCH(
       where: {
         id: courseId,
         userId,
-      }
+      },
     });
 
     if (!course) {
@@ -26,7 +26,7 @@ export async function PATCH(
 
     const unpublishedCourse = await db.course.update({
       where: { id: courseId },
-      data: { isPublished: false }
+      data: { isPublished: false },
     });
 
     return NextResponse.json(unpublishedCourse);

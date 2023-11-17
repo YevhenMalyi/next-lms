@@ -4,7 +4,9 @@ import { NextResponse } from 'next/server';
 
 export async function DELETE(
   req: Request,
-  { params: { courseId, attachmentId } }: { params: { courseId: string, attachmentId: string } }
+  {
+    params: { courseId, attachmentId },
+  }: { params: { courseId: string; attachmentId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -17,7 +19,7 @@ export async function DELETE(
       where: {
         id: courseId,
         userId,
-      }
+      },
     });
 
     if (!course) {
@@ -28,12 +30,15 @@ export async function DELETE(
       where: {
         courseId,
         id: attachmentId,
-      }
+      },
     });
 
     return NextResponse.json(attachment);
   } catch (err) {
-    console.log('api/courses/[courseId]/attachments/[attachmentId] DELETE:', err);
+    console.log(
+      'api/courses/[courseId]/attachments/[attachmentId] DELETE:',
+      err
+    );
     return new NextResponse('Internal Error', { status: 500 });
   }
 }

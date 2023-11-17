@@ -4,7 +4,9 @@ import { NextResponse } from 'next/server';
 
 export async function PATCH(
   req: Request,
-  { params: { courseId, chapterId } }: { params: { courseId: string, chapterId: string } }
+  {
+    params: { courseId, chapterId },
+  }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -17,7 +19,7 @@ export async function PATCH(
       where: {
         id: courseId,
         userId,
-      }
+      },
     });
 
     if (!course) {
@@ -30,18 +32,27 @@ export async function PATCH(
 
     const muxData = await db.muxData.findUnique({ where: { chapterId } });
 
-    if (!chapter || !muxData || !chapter.title || !chapter.description || !chapter.videoUrl) {
+    if (
+      !chapter ||
+      !muxData ||
+      !chapter.title ||
+      !chapter.description ||
+      !chapter.videoUrl
+    ) {
       return new NextResponse('Mising required fields', { status: 400 });
     }
 
     const publishedChapter = await db.chapter.update({
       where: { id: chapterId, courseId },
-      data: { isPublished: true }
+      data: { isPublished: true },
     });
 
     return NextResponse.json(publishedChapter);
   } catch (err) {
-    console.log('api/courses/[courseId]/chapters/[chapterId]/publish PATCH:', err);
+    console.log(
+      'api/courses/[courseId]/chapters/[chapterId]/publish PATCH:',
+      err
+    );
     return new NextResponse('Internal Error', { status: 500 });
   }
 }

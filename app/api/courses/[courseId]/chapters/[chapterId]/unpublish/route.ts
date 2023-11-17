@@ -4,7 +4,9 @@ import { NextResponse } from 'next/server';
 
 export async function PATCH(
   req: Request,
-  { params: { courseId, chapterId } }: { params: { courseId: string, chapterId: string } }
+  {
+    params: { courseId, chapterId },
+  }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -17,7 +19,7 @@ export async function PATCH(
       where: {
         id: courseId,
         userId,
-      }
+      },
     });
 
     if (!course) {
@@ -34,12 +36,15 @@ export async function PATCH(
 
     const unpublishedChapter = await db.chapter.update({
       where: { id: chapterId, courseId },
-      data: { isPublished: false }
+      data: { isPublished: false },
     });
 
     return NextResponse.json(unpublishedChapter);
   } catch (err) {
-    console.log('api/courses/[courseId]/chapters/[chapterId]/publish PATCH:', err);
+    console.log(
+      'api/courses/[courseId]/chapters/[chapterId]/publish PATCH:',
+      err
+    );
     return new NextResponse('Internal Error', { status: 500 });
   }
 }

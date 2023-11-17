@@ -5,12 +5,15 @@ import { auth } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
 
 const { Video } = new Mux(
-  process.env.MUX_TOKEN_ID!, process.env.MUX_TOKEN_SECRET!
+  process.env.MUX_TOKEN_ID!,
+  process.env.MUX_TOKEN_SECRET!
 );
 
 export async function PATCH(
   req: Request,
-  { params: { courseId, chapterId } }: { params: { courseId: string, chapterId: string } }
+  {
+    params: { courseId, chapterId },
+  }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -25,7 +28,7 @@ export async function PATCH(
       where: {
         id: courseId,
         userId,
-      }
+      },
     });
 
     if (!course) {
@@ -34,13 +37,13 @@ export async function PATCH(
 
     const chapter = await db.chapter.update({
       where: { id: chapterId },
-      data: { ...values }
+      data: { ...values },
     });
 
     if (values.videoUrl) {
-      const existingMuxData = await db.muxData.findFirst(
-        { where: { chapterId } }
-      );
+      const existingMuxData = await db.muxData.findFirst({
+        where: { chapterId },
+      });
 
       if (existingMuxData) {
         await Video.Assets.del(existingMuxData.assetId);
@@ -57,7 +60,7 @@ export async function PATCH(
         data: {
           chapterId,
           assetId: asset.id,
-          playbackId: asset.playback_ids?.[0]?.id
+          playbackId: asset.playback_ids?.[0]?.id,
         },
       });
     }
@@ -71,7 +74,9 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params: { courseId, chapterId } }: { params: { courseId: string, chapterId: string } }
+  {
+    params: { courseId, chapterId },
+  }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -84,7 +89,7 @@ export async function DELETE(
       where: {
         id: courseId,
         userId,
-      }
+      },
     });
 
     if (!course) {
@@ -100,9 +105,9 @@ export async function DELETE(
     }
 
     if (chapter.videoUrl) {
-      const existingMuxData = await db.muxData.findFirst(
-        { where: { chapterId } }
-      );
+      const existingMuxData = await db.muxData.findFirst({
+        where: { chapterId },
+      });
 
       if (existingMuxData) {
         await Video.Assets.del(existingMuxData.assetId);
@@ -115,13 +120,13 @@ export async function DELETE(
     });
 
     const publishedChaptersInCourse = await db.chapter.findMany({
-      where: { courseId, isPublished: true }
+      where: { courseId, isPublished: true },
     });
 
     if (!publishedChaptersInCourse.length) {
       await db.course.update({
         where: { id: courseId },
-        data: { isPublished: false }
+        data: { isPublished: false },
       });
     }
 

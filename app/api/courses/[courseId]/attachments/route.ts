@@ -18,7 +18,7 @@ export async function POST(
       where: {
         id: courseId,
         userId,
-      }
+      },
     });
 
     if (!course) {
@@ -30,7 +30,7 @@ export async function POST(
         name: url.split('/').pop(),
         courseId,
         url,
-      }
+      },
     });
 
     return NextResponse.json(attachment);
