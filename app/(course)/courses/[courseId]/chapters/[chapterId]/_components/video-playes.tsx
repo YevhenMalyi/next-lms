@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { useConfettiStore } from '@/hooks/use-confetti-store';
 
 interface IVideoPlayerProps {
-  playbackId: string;
+  playbackId?: string | null;
   courseId: string;
   chapterId: string;
   nextChapterId?: string;
@@ -52,7 +52,7 @@ export const VideoPlayer = ({
           onCanPlay={() => setIsReady(true)}
           onEnded={() => {}}
           autoPlay
-          playbackId={playbackId}
+          playbackId={playbackId!}
         />
       )}
     </div>
